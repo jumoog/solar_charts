@@ -34,7 +34,6 @@ csv({
 	})
 
 db.loadDatabase({}, function () {
-	let users = db.getCollection('children')
 	http.listen(3000, function () {
 		console.log('listening on *:3000')
 	});
@@ -45,8 +44,8 @@ app.get('/', function (req, res) {
 });
 
 app.get('/data', function (req, res) {
-	let users = db.getCollection('children')
-	res.send(JSON.stringify(users.find({
+	let values = db.getCollection('children')
+	res.send(JSON.stringify(values.find({
 		Date: {
 			'$between': [req.query.start, req.query.end]
 		}
