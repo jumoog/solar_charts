@@ -1,0 +1,12 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+.idea
+config.yml
+DATA.CSV
+loki.json
+
+# Dependency directories
+node_modules
+jspm_packages
