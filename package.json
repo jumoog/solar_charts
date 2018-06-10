@@ -1,0 +1,25 @@
+{
+  "name": "solar_charts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jumoog/solar_charts.git"
+  },
+  "author": "jumoog",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jumoog/solar_charts/issues"
+  },
+  "homepage": "https://github.com/jumoog/solar_charts#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "csvtojson": "^2.0.3",
+    "express": "^4.16.3",
+    "lokijs": "^1.5.5"
+  }
+}
