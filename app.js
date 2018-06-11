@@ -44,7 +44,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/data', function (req, res) {
-	let values = db.getCollection('children')
+	let values = db.getCollection('values')
 	res.send(JSON.stringify(values.find({
 		Date: {
 			'$between': [req.query.start, req.query.end]
