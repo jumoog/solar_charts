@@ -8,6 +8,7 @@
   <script src="js/knockout-min.js"></script>
   <script src="js/Chart.bundle.js"></script>
   <script src="js/chartjs-plugin-annotation.js"></script>
+  <script src="js/umd.js"></script>
   <title>🌞Solar Chart📈</title>
 </head>
 
@@ -26,6 +27,46 @@
   </div>
 
   <script>
+    i18n.configure({
+      // store of translations
+      locales: {
+        'en': {
+          "MPPT1_text": "power MPP1",
+          "MPPT2_text": "power  MPP2",
+          "MPPT_text": "power MPP Sum",
+          "EP_text": "AC power",
+          "line1_text": "bottleneck power",
+          "line2_text": "70% curtailment",
+          "xAxes_text": "Time",
+          "yAxes_text": "Power"
+        },
+        'de': {
+          "MPPT1_text": "Leistung MPP1",
+          "MPPT2_text": "Leistung MPP2",
+          "MPPT_text": "Leistung MPP Gesamt",
+          "EP_text": "AC Leistung",
+          "line1_text": "Engpass Leistung",
+          "line2_text": "70% Abregelung",
+          "xAxes_text": "Zeit",
+          "yAxes_text": "Leistung"
+        }
+      },
+
+      // sets a custom cookie name to read/write locale  - defaults to NULL
+      cookie: 'locale',
+
+      // injects `__` and `__n` functions to global scope
+      // some methods like `setLocale` are injected to this functions
+      // e.g. `__.getLocale()`
+      // defaults to false
+      globalize: true
+    });
+    if (navigator.language === "de-DE") {
+      __.setLocale("de");
+    }
+    else {
+      __.setLocale("en");
+    }
     window.chartColors = {
       mpp_1: 'rgb(0, 204, 255)',
       mpp_2: 'rgb(0, 230, 0)',
@@ -68,7 +109,7 @@
         MPPT1.push(((result[i]["Udc MPPT1[V]"] * result[i]["Idc MPPT1[A]"]) / 1000).toFixed(2));
         MPPT2.push(((result[i]["Udc MPPT2[V]"] * result[i]["Idc MPPT2[A]"]) / 1000).toFixed(2));
         MPPT.push((((result[i]["Udc MPPT2[V]"] * result[i]["Idc MPPT2[A]"]) + (result[i]["Udc MPPT1[V]"] * result[i]
-          ["Idc MPPT1[A]"])) / 1000).toFixed(2));
+        ["Idc MPPT1[A]"])) / 1000).toFixed(2));
         EP.push(((result[i]["Energy positiv [Ws]"] / result[i]["Periode [s]"]) / 1000).toFixed(2));
 
       }
@@ -77,37 +118,37 @@
         data: {
           labels: labels,
           datasets: [{
-              label: "Leistung MPP1 [kW]",
-              backgroundColor: window.chartColors.mpp_1,
-              borderColor: window.chartColors.mpp_1,
-              borderWidth: 2,
-              fill: false,
-              data: MPPT1
-            },
-            {
-              label: "Leistung MPP2 [kW]",
-              backgroundColor: window.chartColors.mpp_2,
-              borderColor: window.chartColors.mpp_2,
-              borderWidth: 2,
-              fill: false,
-              data: MPPT2
-            },
-            {
-              label: "Leistung MPP Gesamt [kW]",
-              backgroundColor: window.chartColors.gpp,
-              borderColor: window.chartColors.gpp,
-              borderWidth: 2,
-              fill: false,
-              data: MPPT
-            },
-            {
-              label: "AC Leistung [kW]",
-              backgroundColor: window.chartColors.acc,
-              borderColor: window.chartColors.acc,
-              borderWidth: 2,
-              fill: false,
-              data: EP
-            },
+            label: `${__('MPPT1_text')} [kW]`,
+            backgroundColor: window.chartColors.mpp_1,
+            borderColor: window.chartColors.mpp_1,
+            borderWidth: 2,
+            fill: false,
+            data: MPPT1
+          },
+          {
+            label: `${__('MPPT2_text')} [kW]`,
+            backgroundColor: window.chartColors.mpp_2,
+            borderColor: window.chartColors.mpp_2,
+            borderWidth: 2,
+            fill: false,
+            data: MPPT2
+          },
+          {
+            label: `${__('MPPT_text')} [kW]`,
+            backgroundColor: window.chartColors.gpp,
+            borderColor: window.chartColors.gpp,
+            borderWidth: 2,
+            fill: false,
+            data: MPPT
+          },
+          {
+            label: `${__('EP_text')} [kW]`,
+            backgroundColor: window.chartColors.acc,
+            borderColor: window.chartColors.acc,
+            borderWidth: 2,
+            fill: false,
+            data: EP
+          },
           ]
         },
         options: {
@@ -131,29 +172,29 @@
           },
           annotation: {
             annotations: [{
-                type: 'line',
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
-                value: 8.2,
-                borderColor: window.chartColors.red,
-                borderWidth: 2,
-                label: {
-                  enabled: true,
-                  content: 'Engpass Leistung (8,2 kW)'
-                }
-              },
-              {
-                type: 'line',
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
-                value: 6.93,
-                borderColor: window.chartColors.red,
-                borderWidth: 2,
-                label: {
-                  enabled: true,
-                  content: '70% Abregelung (6,93 kW)'
-                }
+              type: 'line',
+              mode: 'horizontal',
+              scaleID: 'y-axis-0',
+              value: 8.2,
+              borderColor: window.chartColors.red,
+              borderWidth: 2,
+              label: {
+                enabled: true,
+                content: `${__('line1_text')} '8,2' [kW]`
               }
+            },
+            {
+              type: 'line',
+              mode: 'horizontal',
+              scaleID: 'y-axis-0',
+              value: 6.93,
+              borderColor: window.chartColors.red,
+              borderWidth: 2,
+              label: {
+                enabled: true,
+                content: `${__('line2_text')} '6,93' [kW]`
+              }
+            }
             ]
           },
           scales: {
@@ -161,14 +202,14 @@
               display: true,
               scaleLabel: {
                 display: true,
-                labelString: 'Zeit'
+                labelString: `${__('xAxes_text')}`
               }
             }],
             yAxes: [{
               display: true,
               scaleLabel: {
                 display: true,
-                labelString: 'Leistung [kW]'
+                labelString: `${__('yAxes_text')} [kW]`
               }
             }]
           }
