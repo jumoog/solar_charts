@@ -9,11 +9,12 @@
   <script src="js/Chart.bundle.js"></script>
   <script src="js/chartjs-plugin-annotation.js"></script>
   <script src="js/umd.js"></script>
+  <script src="js/pure-swipe.min.js"></script>
   <title>🌞Solar Chart📈</title>
 </head>
 
 <body>
-  <form>
+  <form id='myForm'>
     <div id="chartContainer">
       <label for="bday">Start:</label>
       <input type="date" id="start" name="start">
@@ -27,6 +28,26 @@
   </div>
 
   <script>
+    document.addEventListener('swiped-left', function (e) {
+      var date_input = document.getElementById('start');
+      var date_value = date_input.value;
+      var myDate = new Date(date_value);
+      myDate.setDate(myDate.getDate() + 1);
+      date_input.valueAsDate = myDate;
+      var date_input2 = document.getElementById('end');
+      date_input2.valueAsDate = myDate;
+      document.getElementById("myForm").submit();
+    });
+    document.addEventListener('swiped-right', function (e) {
+      var date_input = document.getElementById('start');
+      var date_value = date_input.value;
+      var myDate = new Date(date_value);
+      myDate.setDate(myDate.getDate() - 1);
+      date_input.valueAsDate = myDate;
+      var date_input2 = document.getElementById('end');
+      date_input2.valueAsDate = myDate;
+      document.getElementById("myForm").submit();
+    });
     i18n.configure({
       // store of translations
       locales: {
@@ -63,8 +84,7 @@
     });
     if (navigator.language === "de-DE") {
       __.setLocale("de");
-    }
-    else {
+    } else {
       __.setLocale("en");
     }
     window.chartColors = {
@@ -109,7 +129,7 @@
         MPPT1.push(((result[i]["Udc MPPT1[V]"] * result[i]["Idc MPPT1[A]"]) / 1000).toFixed(2));
         MPPT2.push(((result[i]["Udc MPPT2[V]"] * result[i]["Idc MPPT2[A]"]) / 1000).toFixed(2));
         MPPT.push((((result[i]["Udc MPPT2[V]"] * result[i]["Idc MPPT2[A]"]) + (result[i]["Udc MPPT1[V]"] * result[i]
-        ["Idc MPPT1[A]"])) / 1000).toFixed(2));
+          ["Idc MPPT1[A]"])) / 1000).toFixed(2));
         EP.push(((result[i]["Energy positiv [Ws]"] / result[i]["Periode [s]"]) / 1000).toFixed(2));
 
       }
@@ -118,37 +138,37 @@
         data: {
           labels: labels,
           datasets: [{
-            label: `${__('MPPT1_text')} [kW]`,
-            backgroundColor: window.chartColors.mpp_1,
-            borderColor: window.chartColors.mpp_1,
-            borderWidth: 2,
-            fill: false,
-            data: MPPT1
-          },
-          {
-            label: `${__('MPPT2_text')} [kW]`,
-            backgroundColor: window.chartColors.mpp_2,
-            borderColor: window.chartColors.mpp_2,
-            borderWidth: 2,
-            fill: false,
-            data: MPPT2
-          },
-          {
-            label: `${__('MPPT_text')} [kW]`,
-            backgroundColor: window.chartColors.gpp,
-            borderColor: window.chartColors.gpp,
-            borderWidth: 2,
-            fill: false,
-            data: MPPT
-          },
-          {
-            label: `${__('EP_text')} [kW]`,
-            backgroundColor: window.chartColors.acc,
-            borderColor: window.chartColors.acc,
-            borderWidth: 2,
-            fill: false,
-            data: EP
-          },
+              label: `${__('MPPT1_text')} [kW]`,
+              backgroundColor: window.chartColors.mpp_1,
+              borderColor: window.chartColors.mpp_1,
+              borderWidth: 2,
+              fill: false,
+              data: MPPT1
+            },
+            {
+              label: `${__('MPPT2_text')} [kW]`,
+              backgroundColor: window.chartColors.mpp_2,
+              borderColor: window.chartColors.mpp_2,
+              borderWidth: 2,
+              fill: false,
+              data: MPPT2
+            },
+            {
+              label: `${__('MPPT_text')} [kW]`,
+              backgroundColor: window.chartColors.gpp,
+              borderColor: window.chartColors.gpp,
+              borderWidth: 2,
+              fill: false,
+              data: MPPT
+            },
+            {
+              label: `${__('EP_text')} [kW]`,
+              backgroundColor: window.chartColors.acc,
+              borderColor: window.chartColors.acc,
+              borderWidth: 2,
+              fill: false,
+              data: EP
+            },
           ]
         },
         options: {
@@ -172,29 +192,31 @@
           },
           annotation: {
             annotations: [{
-              type: 'line',
-              mode: 'horizontal',
-              scaleID: 'y-axis-0',
-              value: 8.2,
-              borderColor: window.chartColors.red,
-              borderWidth: 2,
-              label: {
-                enabled: true,
-                content: `${__('line1_text')} '8,2' [kW]`
+                type: 'line',
+                mode: 'horizontal',
+                scaleID: 'y-axis-0',
+                value: 8.2,
+                borderColor: window.chartColors.red,
+                borderWidth: 2,
+                label: {
+                  enabled: true,
+                  content: `${__('line1_text')} '8,2' [kW]`,
+                  position: "left"
+                }
+              },
+              {
+                type: 'line',
+                mode: 'horizontal',
+                scaleID: 'y-axis-0',
+                value: 6.93,
+                borderColor: window.chartColors.red,
+                borderWidth: 2,
+                label: {
+                  enabled: true,
+                  content: `${__('line2_text')} '6,93' [kW]`,
+                  position: "left"
+                }
               }
-            },
-            {
-              type: 'line',
-              mode: 'horizontal',
-              scaleID: 'y-axis-0',
-              value: 6.93,
-              borderColor: window.chartColors.red,
-              borderWidth: 2,
-              label: {
-                enabled: true,
-                content: `${__('line2_text')} '6,93' [kW]`
-              }
-            }
             ]
           },
           scales: {
